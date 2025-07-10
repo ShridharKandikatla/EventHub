@@ -17,10 +17,12 @@ import {
   Edit,
   Trash2,
   MoreVertical,
-  Settings
+  Settings,
+  MessageCircle
 } from 'lucide-react';
 import { eventsAPI, ticketsAPI } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
+import EventForum from '../components/events/EventForum';
 
 const EventDetails = () => {
   const { id } = useParams();
@@ -404,28 +406,8 @@ const EventDetails = () => {
               </div>
             </div>
 
-            {/* Event Forums */}
-            <div className="bg-white rounded-lg shadow-md p-8">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-2xl font-bold text-gray-900">Event Discussions</h2>
-                <Link
-                  to={`/forums?event=${event._id}`}
-                  className="text-indigo-600 hover:text-indigo-700 font-medium text-sm"
-                >
-                  View All
-                </Link>
-              </div>
-              <p className="text-gray-600 mb-4">
-                Join the conversation with other attendees, ask questions, and share your excitement!
-              </p>
-              <Link
-                to={`/forums?event=${event._id}`}
-                className="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors duration-200"
-              >
-                <MessageCircle className="h-4 w-4 mr-2" />
-                Join Discussion
-              </Link>
-            </div>
+            {/* Event Forum */}
+            <EventForum eventId={event._id} />
           </div>
 
           {/* Sidebar */}

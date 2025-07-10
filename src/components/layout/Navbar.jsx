@@ -49,13 +49,6 @@ const Navbar = () => {
               Events
             </Link>
             
-            <Link 
-              to="/forums" 
-              className="text-gray-700 hover:text-indigo-600 transition-colors duration-200 font-medium"
-            >
-              Forums
-            </Link>
-            
             {isAuthenticated ? (
               <>
                 <Link 
@@ -203,14 +196,6 @@ const Navbar = () => {
                 onClick={() => setIsMenuOpen(false)}
               >
                 Events
-              </Link>
-              
-              <Link 
-                to="/forums" 
-                className="text-gray-700 hover:text-indigo-600 transition-colors duration-200 font-medium"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Forums
               </Link>
               
               {isAuthenticated ? (

@@ -15,8 +15,6 @@ import EditEvent from './pages/EditEvent';
 import MyTickets from './pages/MyTickets';
 import Profile from './pages/Profile';
 import Analytics from './pages/Analytics';
-import Forums from './pages/Forums';
-import ForumDetails from './pages/ForumDetails';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 
 function App() {
@@ -31,8 +29,6 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/events" element={<Events />} />
                 <Route path="/events/:id" element={<EventDetails />} />
-                <Route path="/forums" element={<Forums />} />
-                <Route path="/forums/:id" element={<ForumDetails />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route 
