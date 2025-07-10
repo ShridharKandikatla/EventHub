@@ -103,13 +103,32 @@ export const analyticsAPI = {
 
 // Forums API
 export const forumsAPI = {
-  getEventForums: (eventId) => api.get(`/forums/event/${eventId}`),
+  getForums: (params) => api.get('/forums', { params }),
+  getForum: (id) => api.get(`/forums/${id}`),
   createForum: (forumData) => api.post('/forums', forumData),
+  updateForum: (id, forumData) => api.put(`/forums/${id}`, forumData),
+  deleteForum: (id) => api.delete(`/forums/${id}`),
+  joinForum: (id) => api.post(`/forums/${id}/join`),
+  leaveForum: (id) => api.post(`/forums/${id}/leave`),
+  getEventForums: (eventId) => api.get(`/forums/event/${eventId}`),
+  getPosts: (forumId, params) => api.get(`/forums/${forumId}/posts`, { params }),
   addPost: (forumId, content, attachments) => 
     api.post(`/forums/${forumId}/posts`, { content, attachments }),
+  updatePost: (forumId, postId, content) => 
+    api.put(`/forums/${forumId}/posts/${postId}`, { content }),
+  deletePost: (forumId, postId) => api.delete(`/forums/${forumId}/posts/${postId}`),
   likePost: (forumId, postId) => api.post(`/forums/${forumId}/posts/${postId}/like`),
+  unlikePost: (forumId, postId) => api.delete(`/forums/${forumId}/posts/${postId}/like`),
   replyToPost: (forumId, postId, content) => 
     api.post(`/forums/${forumId}/posts/${postId}/reply`, { content }),
+  updateReply: (forumId, postId, replyId, content) => 
+    api.put(`/forums/${forumId}/posts/${postId}/replies/${replyId}`, { content }),
+  deleteReply: (forumId, postId, replyId) => 
+    api.delete(`/forums/${forumId}/posts/${postId}/replies/${replyId}`),
+  reportPost: (forumId, postId, reason) => 
+    api.post(`/forums/${forumId}/posts/${postId}/report`, { reason }),
+  pinPost: (forumId, postId) => api.post(`/forums/${forumId}/posts/${postId}/pin`),
+  unpinPost: (forumId, postId) => api.delete(`/forums/${forumId}/posts/${postId}/pin`),
 };
 
 // Streaming API
