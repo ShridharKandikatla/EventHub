@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { forumsAPI } from '../../services/api';
-import { useAuth } from '../../contexts/AuthContext';
-import { 
-  MessageCircle, 
-  Plus, 
-  Search, 
+import React, { useState, useEffect } from "react";
+import { forumsAPI } from "../../services/api";
+import { useAuth } from "../../contexts/AuthContext";
+import {
+  MessageCircle,
+  Plus,
+  Search,
   Users,
   Pin,
   Send,
@@ -13,9 +13,9 @@ import {
   MoreVertical,
   Edit,
   Trash2,
-  Flag
-} from 'lucide-react';
-import { format } from 'date-fns';
+  Flag,
+} from "lucide-react";
+import { format } from "date-fns";
 
 const EventForum = ({ eventId }) => {
   const { user, isAuthenticated } = useAuth();
@@ -24,17 +24,23 @@ const EventForum = ({ eventId }) => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showNewPostForm, setShowNewPostForm] = useState(false);
-  const [newPostContent, setNewPostContent] = useState('');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [newPostContent, setNewPostContent] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
   const [showCreateForum, setShowCreateForum] = useState(false);
   const [newForumData, setNewForumData] = useState({
-    title: '',
-    description: '',
-    category: 'general'
+    title: "",
+    description: "",
+    category: "general",
   });
 
   const categories = [
-    'general', 'announcements', 'networking', 'q&a', 'feedback', 'technical', 'social'
+    "general",
+    "announcements",
+    "networking",
+    "q&a",
+    "feedback",
+    "technical",
+    "social",
   ];
 
   useEffect(() => {
@@ -51,16 +57,17 @@ const EventForum = ({ eventId }) => {
     try {
       setLoading(true);
       const response = await forumsAPI.getEventForums(eventId);
-      const eventForums = response.data.forums || [];
+      const eventForums = response.data || [];
       setForums(eventForums);
-      
+
       // Auto-select first forum or general forum
       if (eventForums.length > 0) {
-        const generalForum = eventForums.find(f => f.category === 'general') || eventForums[0];
+        const generalForum =
+          eventForums.find((f) => f.category === "general") || eventForums[0];
         setSelectedForum(generalForum);
       }
     } catch (error) {
-      console.error('Failed to fetch event forums:', error);
+      console.error("Failed to fetch event forums:", error);
       setForums([]);
     } finally {
       setLoading(false);
@@ -69,10 +76,10 @@ const EventForum = ({ eventId }) => {
 
   const fetchForumPosts = async (forumId) => {
     try {
-      const response = await forumsAPI.getPosts(forumId, { sortBy: 'recent' });
-      setPosts(response.data.posts || []);
+      const response = await forumsAPI.getPosts(forumId, { sortBy: "recent" });
+      setPosts(response.data || []);
     } catch (error) {
-      console.error('Failed to fetch forum posts:', error);
+      console.error("Failed to fetch forum posts:", error);
       setPosts([]);
     }
   };
@@ -85,13 +92,13 @@ const EventForum = ({ eventId }) => {
       await forumsAPI.createForum({
         ...newForumData,
         eventId,
-        isPrivate: true // Event forums are private by default
+        isPrivate: true, // Event forums are private by default
       });
-      setNewForumData({ title: '', description: '', category: 'general' });
+      setNewForumData({ title: "", description: "", category: "general" });
       setShowCreateForum(false);
       fetchEventForums();
     } catch (error) {
-      console.error('Failed to create forum:', error);
+      console.error("Failed to create forum:", error);
     }
   };
 
@@ -101,11 +108,11 @@ const EventForum = ({ eventId }) => {
 
     try {
       await forumsAPI.addPost(selectedForum._id, newPostContent, []);
-      setNewPostContent('');
+      setNewPostContent("");
       setShowNewPostForm(false);
       fetchForumPosts(selectedForum._id);
     } catch (error) {
-      console.error('Failed to create post:', error);
+      console.error("Failed to create post:", error);
     }
   };
 
@@ -114,7 +121,7 @@ const EventForum = ({ eventId }) => {
       await forumsAPI.likePost(selectedForum._id, postId);
       fetchForumPosts(selectedForum._id);
     } catch (error) {
-      console.error('Failed to like post:', error);
+      console.error("Failed to like post:", error);
     }
   };
 
@@ -123,14 +130,18 @@ const EventForum = ({ eventId }) => {
       await forumsAPI.replyToPost(selectedForum._id, postId, content);
       fetchForumPosts(selectedForum._id);
     } catch (error) {
-      console.error('Failed to reply to post:', error);
+      console.error("Failed to reply to post:", error);
     }
   };
 
-  const filteredPosts = posts.filter(post => {
+
+  const filteredPosts = posts.filter((post) => {
     if (!searchQuery) return true;
-    return post.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
-           post.author.firstName.toLowerCase().includes(searchQuery.toLowerCase());
+    console.log(post);
+    return (
+      post.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      post.author.firstName.toLowerCase().includes(searchQuery.toLowerCase())
+    );
   });
 
   if (loading) {
@@ -166,7 +177,6 @@ const EventForum = ({ eventId }) => {
             </button>
           )}
         </div>
-
         {/* Forum Tabs */}
         {forums.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-4">
@@ -176,8 +186,8 @@ const EventForum = ({ eventId }) => {
                 onClick={() => setSelectedForum(forum)}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 ${
                   selectedForum?._id === forum._id
-                    ? 'bg-indigo-100 text-indigo-700'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    ? "bg-indigo-100 text-indigo-700"
+                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                 }`}
               >
                 {forum.title}
@@ -189,23 +199,38 @@ const EventForum = ({ eventId }) => {
 
         {/* Create Forum Form */}
         {showCreateForum && isAuthenticated && (
-          <form onSubmit={handleCreateForum} className="bg-gray-50 rounded-lg p-4 mb-4">
-            <h3 className="font-semibold text-gray-900 mb-3">Create New Discussion Topic</h3>
+          <form
+            onSubmit={handleCreateForum}
+            className="bg-gray-50 rounded-lg p-4 mb-4"
+          >
+            <h3 className="font-semibold text-gray-900 mb-3">
+              Create New Discussion Topic
+            </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <input
                 type="text"
                 value={newForumData.title}
-                onChange={(e) => setNewForumData(prev => ({ ...prev, title: e.target.value }))}
+                onChange={(e) =>
+                  setNewForumData((prev) => ({
+                    ...prev,
+                    title: e.target.value,
+                  }))
+                }
                 placeholder="Topic title"
                 className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 required
               />
               <select
                 value={newForumData.category}
-                onChange={(e) => setNewForumData(prev => ({ ...prev, category: e.target.value }))}
+                onChange={(e) =>
+                  setNewForumData((prev) => ({
+                    ...prev,
+                    category: e.target.value,
+                  }))
+                }
                 className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
               >
-                {categories.map(category => (
+                {categories.map((category) => (
                   <option key={category} value={category}>
                     {category.charAt(0).toUpperCase() + category.slice(1)}
                   </option>
@@ -214,7 +239,12 @@ const EventForum = ({ eventId }) => {
             </div>
             <textarea
               value={newForumData.description}
-              onChange={(e) => setNewForumData(prev => ({ ...prev, description: e.target.value }))}
+              onChange={(e) =>
+                setNewForumData((prev) => ({
+                  ...prev,
+                  description: e.target.value,
+                }))
+              }
               placeholder="Brief description (optional)"
               rows={2}
               className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 mb-4"
@@ -238,18 +268,18 @@ const EventForum = ({ eventId }) => {
         )}
 
         {/* Search */}
-        {selectedForum && (
+        {/* {selectedForum && (
           <div className="relative">
             <input
               type="text"
-              value={searchQuery}
+              // value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search discussions..."
               className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
             <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
           </div>
-        )}
+        )} */}
       </div>
 
       {/* Forum Content */}
@@ -257,9 +287,12 @@ const EventForum = ({ eventId }) => {
         {forums.length === 0 ? (
           <div className="text-center py-8">
             <MessageCircle className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">No discussions yet</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              No discussions yet
+            </h3>
             <p className="text-gray-600 mb-4">
-              Start the conversation! Create the first discussion topic for this event.
+              Start the conversation! Create the first discussion topic for this
+              event.
             </p>
             {isAuthenticated && (
               <button
@@ -273,19 +306,31 @@ const EventForum = ({ eventId }) => {
           </div>
         ) : !selectedForum ? (
           <div className="text-center py-8">
-            <p className="text-gray-600">Select a discussion topic to view posts</p>
+            <p className="text-gray-600">
+              Select a discussion topic to view posts
+            </p>
           </div>
         ) : (
           <div className="space-y-6">
             {/* Selected Forum Info */}
             <div className="bg-gray-50 rounded-lg p-4">
-              <h3 className="font-semibold text-gray-900 mb-1">{selectedForum.title}</h3>
+              <h3 className="font-semibold text-gray-900 mb-1">
+                {selectedForum.title}
+              </h3>
               {selectedForum.description && (
-                <p className="text-gray-600 text-sm mb-2">{selectedForum.description}</p>
+                <p className="text-gray-600 text-sm mb-2">
+                  {selectedForum.description}
+                </p>
               )}
               <div className="flex items-center space-x-4 text-sm text-gray-500">
-                <span>{filteredPosts.length} posts</span>
-                <span>{new Set(filteredPosts.map(p => p.author._id)).size} participants</span>
+                <span>{filteredPosts[0]?.posts.length} posts</span>
+                <span>
+                  {
+                    new Set(filteredPosts[0]?.posts.map((p) => p.author._id))
+                      .size
+                  }{" "}
+                  participants
+                </span>
               </div>
             </div>
 
@@ -304,9 +349,15 @@ const EventForum = ({ eventId }) => {
                     <div className="flex space-x-3">
                       <div className="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center flex-shrink-0">
                         {user.avatar ? (
-                          <img src={user.avatar} alt="Avatar" className="w-8 h-8 rounded-full object-cover" />
+                          <img
+                            src={user.avatar}
+                            alt="Avatar"
+                            className="w-8 h-8 rounded-full object-cover"
+                          />
                         ) : (
-                          <span className="text-white text-sm font-medium">{user.firstName?.[0]}</span>
+                          <span className="text-white text-sm font-medium">
+                            {user.firstName?.[0]}
+                          </span>
                         )}
                       </div>
                       <div className="flex-1">
@@ -322,7 +373,7 @@ const EventForum = ({ eventId }) => {
                             type="button"
                             onClick={() => {
                               setShowNewPostForm(false);
-                              setNewPostContent('');
+                              setNewPostContent("");
                             }}
                             className="px-4 py-2 text-gray-600 hover:text-gray-800"
                           >
@@ -349,18 +400,17 @@ const EventForum = ({ eventId }) => {
               <div className="text-center py-8">
                 <MessageCircle className="h-12 w-12 text-gray-300 mx-auto mb-4" />
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                  {searchQuery ? 'No posts found' : 'No posts yet'}
+                  {searchQuery ? "No posts found" : "No posts yet"}
                 </h3>
                 <p className="text-gray-600">
-                  {searchQuery 
-                    ? 'Try adjusting your search terms'
-                    : 'Be the first to share your thoughts!'
-                  }
+                  {searchQuery
+                    ? "Try adjusting your search terms"
+                    : "Be the first to share your thoughts!"}
                 </p>
               </div>
             ) : (
               <div className="space-y-4">
-                {filteredPosts.map((post) => (
+                {filteredPosts[0].posts.map((post) => (
                   <ForumPostCard
                     key={post._id}
                     post={post}
@@ -381,21 +431,22 @@ const EventForum = ({ eventId }) => {
 // Simplified Forum Post Component for Event Page
 const ForumPostCard = ({ post, onLike, onReply, currentUser }) => {
   const [showReplyForm, setShowReplyForm] = useState(false);
-  const [replyContent, setReplyContent] = useState('');
+  const [replyContent, setReplyContent] = useState("");
   const [showReplies, setShowReplies] = useState(false);
 
-  const isLiked = post.likes && currentUser && post.likes.includes(currentUser.id);
+  const isLiked =
+    post.likes && currentUser && post.likes.includes(currentUser.id);
 
   const handleReply = async (e) => {
     e.preventDefault();
     if (!replyContent.trim()) return;
-    
+
     try {
       await onReply(post._id, replyContent);
-      setReplyContent('');
+      setReplyContent("");
       setShowReplyForm(false);
     } catch (error) {
-      console.error('Failed to reply:', error);
+      console.error("Failed to reply:", error);
     }
   };
 
@@ -404,11 +455,16 @@ const ForumPostCard = ({ post, onLike, onReply, currentUser }) => {
       {/* Post Header */}
       <div className="flex items-start space-x-3 mb-3">
         <div className="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center flex-shrink-0">
-          {post.author.avatar ? (
-            <img src={post.author.avatar} alt="Avatar" className="w-8 h-8 rounded-full object-cover" />
+          {post.author?.avatar ? (
+            <img
+              src={post.author.avatar}
+              alt="Avatar"
+              className="w-8 h-8 rounded-full object-cover"
+            />
           ) : (
             <span className="text-white text-sm font-medium">
-              {post.author.firstName?.[0]}{post.author.lastName?.[0]}
+              {post.author.firstName?.[0]}
+              {post.author.lastName?.[0]}
             </span>
           )}
         </div>
@@ -418,10 +474,12 @@ const ForumPostCard = ({ post, onLike, onReply, currentUser }) => {
               {post.author.firstName} {post.author.lastName}
             </h4>
             <span className="text-xs text-gray-500">
-              {format(new Date(post.createdAt), 'MMM dd • h:mm a')}
+              {format(new Date(post.createdAt), "MMM dd • h:mm a")}
             </span>
           </div>
-          <p className="text-gray-800 text-sm mt-1 leading-relaxed">{post.content}</p>
+          <p className="text-gray-800 text-sm mt-1 leading-relaxed">
+            {post.content}
+          </p>
         </div>
       </div>
 
@@ -432,10 +490,10 @@ const ForumPostCard = ({ post, onLike, onReply, currentUser }) => {
             onClick={() => onLike(post._id)}
             disabled={!currentUser}
             className={`flex items-center space-x-1 text-xs ${
-              isLiked ? 'text-red-600' : 'text-gray-500 hover:text-red-600'
+              isLiked ? "text-red-600" : "text-gray-500 hover:text-red-600"
             } transition-colors duration-200`}
           >
-            <Heart className={`h-4 w-4 ${isLiked ? 'fill-current' : ''}`} />
+            <Heart className={`h-4 w-4 ${isLiked ? "fill-current" : ""}`} />
             <span>{post.likes?.length || 0}</span>
           </button>
 
@@ -452,7 +510,8 @@ const ForumPostCard = ({ post, onLike, onReply, currentUser }) => {
               onClick={() => setShowReplies(!showReplies)}
               className="text-xs text-indigo-600 hover:text-indigo-700"
             >
-              {showReplies ? 'Hide' : 'Show'} {post.replies.length} {post.replies.length === 1 ? 'reply' : 'replies'}
+              {showReplies ? "Hide" : "Show"} {post.replies.length}{" "}
+              {post.replies.length === 1 ? "reply" : "replies"}
             </button>
           )}
         </div>
@@ -460,10 +519,15 @@ const ForumPostCard = ({ post, onLike, onReply, currentUser }) => {
 
       {/* Reply Form */}
       {showReplyForm && currentUser && (
-        <form onSubmit={handleReply} className="mt-3 pt-3 border-t border-gray-200">
+        <form
+          onSubmit={handleReply}
+          className="mt-3 pt-3 border-t border-gray-200"
+        >
           <div className="flex space-x-2">
             <div className="w-6 h-6 bg-gray-400 rounded-full flex items-center justify-center flex-shrink-0">
-              <span className="text-white text-xs">{currentUser.firstName?.[0]}</span>
+              <span className="text-white text-xs">
+                {currentUser.firstName?.[0]}
+              </span>
             </div>
             <div className="flex-1">
               <textarea
@@ -478,7 +542,7 @@ const ForumPostCard = ({ post, onLike, onReply, currentUser }) => {
                   type="button"
                   onClick={() => {
                     setShowReplyForm(false);
-                    setReplyContent('');
+                    setReplyContent("");
                   }}
                   className="px-3 py-1 text-xs text-gray-600 hover:text-gray-800"
                 >
@@ -503,7 +567,9 @@ const ForumPostCard = ({ post, onLike, onReply, currentUser }) => {
           {post.replies.map((reply) => (
             <div key={reply._id} className="flex space-x-2">
               <div className="w-6 h-6 bg-gray-400 rounded-full flex items-center justify-center flex-shrink-0">
-                <span className="text-white text-xs">{reply.author.firstName?.[0]}</span>
+                <span className="text-white text-xs">
+                  {reply.author.firstName?.[0]}
+                </span>
               </div>
               <div className="flex-1 bg-gray-50 rounded px-3 py-2">
                 <div className="flex items-center space-x-2 mb-1">
@@ -511,7 +577,7 @@ const ForumPostCard = ({ post, onLike, onReply, currentUser }) => {
                     {reply.author.firstName} {reply.author.lastName}
                   </span>
                   <span className="text-xs text-gray-500">
-                    {format(new Date(reply.createdAt), 'MMM dd • h:mm a')}
+                    {format(new Date(reply.createdAt), "MMM dd • h:mm a")}
                   </span>
                 </div>
                 <p className="text-xs text-gray-800">{reply.content}</p>
