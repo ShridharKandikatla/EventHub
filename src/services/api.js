@@ -54,10 +54,96 @@ export const eventsAPI = {
 
 // Tickets API
 export const ticketsAPI = {
-  bookTicket: (bookingData) => api.post('/tickets/book', bookingData),
+  // Book a ticket
+  bookTicket: async (bookingData) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/tickets/book`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+        body: JSON.stringify(bookingData),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to book ticket');
+      }
+      
+      return await response.json();
+    } catch (error) {
+      console.error('Book ticket error:', error);
+      throw error;
+    }
+  },
+
+  // Get ticket by ID
+  getTicket: async (ticketId) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/tickets/${ticketId}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to get ticket');
+      }
+      
+      return await response.json();
+    } catch (error) {
+      console.error('Get ticket error:', error);
+      throw error;
+    }
+  },
+
+  // Update ticket
+  updateTicket: async (ticketId, updateData) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/tickets/${ticketId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+        body: JSON.stringify(updateData),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to update ticket');
+      }
+      
+      return await response.json();
+    } catch (error) {
+      console.error('Update ticket error:', error);
+      throw error;
+    }
+  },
+
+  // Cancel ticket
+  cancelTicket: async (ticketId, reason) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/tickets/${ticketId}/cancel`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+        body: JSON.stringify({ reason }),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to cancel ticket');
+      }
+      
+      return await response.json();
+    } catch (error) {
+      console.error('Cancel ticket error:', error);
+      throw error;
+    }
+  },
   getMyTickets: () => api.get('/tickets/my-tickets'),
-  getTicket: (id) => api.get(`/tickets/${id}`),
-  cancelTicket: (id) => api.put(`/tickets/${id}/cancel`),
   transferTicket: (id, toUserEmail, reason) => api.post(`/tickets/${id}/transfer`, { toUserEmail, reason }),
   checkInTicket: (id, location) => api.post(`/tickets/${id}/checkin`, { location }),
   downloadTicket: (id) => api.get(`/tickets/${id}/download`, { responseType: 'blob' }),

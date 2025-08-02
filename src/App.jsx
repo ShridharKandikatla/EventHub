@@ -15,6 +15,7 @@ import EditEvent from './pages/EditEvent';
 import MyTickets from './pages/MyTickets';
 import Profile from './pages/Profile';
 import Analytics from './pages/Analytics';
+import PaymentHistory from './components/payments/PaymentHistory';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 
 function App() {
@@ -79,6 +80,7 @@ function App() {
                     </ProtectedRoute>
                   } 
                 />
+                <Route path="/payment-history" element={<PaymentHistory />} />
               </Routes>
             </main>
             <Footer />

@@ -377,6 +377,18 @@ const MyTickets = () => {
                       </div>
                     </div>
                   )}
+
+                  {/* View Payment Details */}
+                  {ticket.paymentStatus === 'completed' && (
+                    <div className="mt-4 pt-4 border-t">
+                      <Link
+                        to="/payment-history"
+                        className="text-indigo-600 hover:text-indigo-700 text-sm font-medium"
+                      >
+                        View Payment Details →
+                      </Link>
+                    </div>
+                  )}
                 </div>
               </div>
             ))}

@@ -23,6 +23,7 @@ import {
 import { eventsAPI, ticketsAPI } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
 import EventForum from '../components/events/EventForum';
+import PaymentModal from '../components/payments/PaymentModal';
 
 const EventDetails = () => {
   const { id } = useParams();
@@ -37,6 +38,8 @@ const EventDetails = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [showActionsMenu, setShowActionsMenu] = useState(false);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [ticketQuantity, setTicketQuantity] = useState(1);
 
   useEffect(() => {
     fetchEvent();
@@ -86,6 +89,11 @@ const EventDetails = () => {
     } finally {
       setBookingLoading(false);
     }
+  };
+
+  const handleBookTicket = (ticketType) => {
+    setSelectedTicketType(ticketType);
+    setShowPaymentModal(true);
   };
 
   const handleUpdateEvent = () => {
@@ -466,7 +474,7 @@ const EventDetails = () => {
 
                       {getAvailableTickets(selectedTicketType) > 0 ? (
                         <button
-                          onClick={() => setShowBookingModal(true)}
+                          onClick={() => handleBookTicket(event.pricing.tiers.find(t => t.name === selectedTicketType))}
                           className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors duration-200 flex items-center justify-center"
                         >
                           <Ticket className="h-5 w-5 mr-2" />
@@ -648,6 +656,20 @@ const EventDetails = () => {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Payment Modal */}
+      {showPaymentModal && (
+        <PaymentModal
+          isOpen={showPaymentModal}
+          onClose={() => {
+            setShowPaymentModal(false);
+            setSelectedTicketType(null);
+          }}
+          event={event}
+          ticketType={selectedTicketType}
+          quantity={ticketQuantity}
+        />
       )}
     </div>
   );
