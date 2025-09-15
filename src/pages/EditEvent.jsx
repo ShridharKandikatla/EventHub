@@ -78,7 +78,7 @@ const EditEvent = () => {
       const event = response.data;
       
       // Check if user is the organizer
-      if (user.id !== event.organizer?.id && user.id !== event.organizer) {
+      if (user.id !== event.organizer?._id && user.id !== event.organizer) {
         setError('You are not authorized to edit this event');
         return;
       }
