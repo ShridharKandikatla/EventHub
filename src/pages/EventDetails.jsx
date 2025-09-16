@@ -80,6 +80,7 @@ const EventDetails = () => {
       };
 
       const response = await ticketsAPI.bookTicket(bookingData);
+      console.log(response, "ticket response");
 
       // Handle successful booking
       alert("Ticket booked successfully!");
@@ -93,7 +94,7 @@ const EventDetails = () => {
   };
 
   const handleBookTicket1 = (ticketType) => {
-    // console.log(ticketType, "handleBookTicket1");
+    // console.log(ticketType, "handleBookTicket1 ticketType");
     setSelectedTicketType(ticketType);
     setShowPaymentModal(true);
   };
@@ -153,13 +154,15 @@ const EventDetails = () => {
   };
 
   const getAvailableTickets = (tierName) => {
+    // console.log(tierName, "getAvailableTickets tierName");
     const tier = event.pricing.tiers.find((t) => t.name === tierName);
     if (!tier) return 0;
-    
+
     // If sold property doesn't exist, assume 0 sold
     const sold = tier.sold || 0;
     const quantity = tier.quantity || 0;
-    
+    // console.log(Math.max(0, quantity - sold), "available tickets");
+
     return Math.max(0, quantity - sold);
   };
 
@@ -170,8 +173,6 @@ const EventDetails = () => {
   };
 
   const isEventOrganizer = () => {
-    console.log(user, "user");
-    console.log(event, "event");
     return (
       user &&
       event &&
@@ -485,8 +486,8 @@ const EventDetails = () => {
                       >
                         {event.pricing.tiers.map((tier) => (
                           <option key={tier.name} value={tier.name}>
-                            {tier.name} - ${tier.price} 
-                            ({getAvailableTickets(tier.name)} available)
+                            {tier.name} - ${tier.price}(
+                            {getAvailableTickets(tier.name)} available)
                           </option>
                         ))}
                       </select>
@@ -509,11 +510,15 @@ const EventDetails = () => {
                               getAvailableTickets(selectedTicketType)
                             )
                           ),
-                        ].map((_, i) => i + 1 <= getAvailableTickets(selectedTicketType) ? (
-                          <option key={i + 1} value={i + 1}>
-                            {i + 1}
-                          </option>
-                        ) : null).filter(Boolean)}
+                        ]
+                          .map((_, i) =>
+                            i + 1 <= getAvailableTickets(selectedTicketType) ? (
+                              <option key={i + 1} value={i + 1}>
+                                {i + 1}
+                              </option>
+                            ) : null
+                          )
+                          .filter(Boolean)}
                       </select>
                     </div>
 
@@ -536,8 +541,11 @@ const EventDetails = () => {
                       {getAvailableTickets(selectedTicketType) > 0 ? (
                         <button
                           onClick={() => {
-                            const selectedTier = event.pricing.tiers.find((t) => t.name === selectedTicketType);
-                            handleBookTicket1(selectedTier);
+                            setTicketQuantity(quantity);
+                            const selectedTier = event.pricing.tiers.find(
+                              (t) => t.name === selectedTicketType
+                            );
+                            handleBookTicket1(selectedTier?.name);
                           }}
                           className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors duration-200 flex items-center justify-center"
                         >
@@ -693,7 +701,7 @@ const EventDetails = () => {
                 Cancel
               </button>
               <button
-                onClick={handleBookTicket}
+                onClick={handleBookTicket1}
                 disabled={bookingLoading}
                 className="flex-1 bg-indigo-600 text-white py-2 rounded-lg font-semibold hover:bg-indigo-700 transition-colors duration-200 disabled:opacity-50"
               >
@@ -751,7 +759,7 @@ const EventDetails = () => {
           isOpen={showPaymentModal}
           onClose={() => {
             setShowPaymentModal(false);
-            setSelectedTicketType(null);
+            // setSelectedTicketType(null);
           }}
           event={event}
           ticketType={selectedTicketType}

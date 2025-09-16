@@ -46,13 +46,13 @@ const Home = () => {
       <section className="relative bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-800 text-white overflow-hidden">
         <div className="absolute inset-0 bg-black opacity-20"></div>
         <div className="absolute inset-0">
-          <img 
+          <img
             src="https://images.pexels.com/photos/1190298/pexels-photo-1190298.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop"
             alt="Event background"
             className="w-full h-full object-cover opacity-30"
           />
         </div>
-        
+
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
           <div className="text-center">
             <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
@@ -62,9 +62,10 @@ const Home = () => {
               </span>
             </h1>
             <p className="text-xl md:text-2xl mb-8 text-gray-200 max-w-3xl mx-auto">
-              Connect with like-minded people, explore new experiences, and create unforgettable memories
+              Connect with like-minded people, explore new experiences, and
+              create unforgettable memories
             </p>
-            
+
             {/* Search Bar */}
             <form onSubmit={handleSearch} className="max-w-2xl mx-auto mb-8">
               <div className="relative">
@@ -149,7 +150,10 @@ const Home = () => {
           {loading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {[...Array(6)].map((_, index) => (
-                <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden animate-pulse">
+                <div
+                  key={index}
+                  className="bg-white rounded-lg shadow-md overflow-hidden animate-pulse"
+                >
                   <div className="h-48 bg-gray-300"></div>
                   <div className="p-6">
                     <div className="h-4 bg-gray-300 rounded mb-2"></div>
@@ -194,12 +198,32 @@ const Home = () => {
 
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
             {[
-              { name: 'Music', icon: '🎵', color: 'bg-purple-100 text-purple-600' },
-              { name: 'Sports', icon: '⚽', color: 'bg-green-100 text-green-600' },
-              { name: 'Technology', icon: '💻', color: 'bg-blue-100 text-blue-600' },
-              { name: 'Food', icon: '🍕', color: 'bg-orange-100 text-orange-600' },
-              { name: 'Art', icon: '🎨', color: 'bg-pink-100 text-pink-600' },
-              { name: 'Business', icon: '💼', color: 'bg-gray-100 text-gray-600' },
+              {
+                name: "Music",
+                icon: "🎵",
+                color: "bg-purple-100 text-purple-600",
+              },
+              {
+                name: "Sports",
+                icon: "⚽",
+                color: "bg-green-100 text-green-600",
+              },
+              {
+                name: "Technology",
+                icon: "💻",
+                color: "bg-blue-100 text-blue-600",
+              },
+              {
+                name: "Food",
+                icon: "🍕",
+                color: "bg-orange-100 text-orange-600",
+              },
+              { name: "Art", icon: "🎨", color: "bg-pink-100 text-pink-600" },
+              {
+                name: "Business",
+                icon: "💼",
+                color: "bg-gray-100 text-gray-600",
+              },
             ].map((category) => (
               <Link
                 key={category.name}
@@ -221,7 +245,8 @@ const Home = () => {
             Ready to Create Your Own Event?
           </h2>
           <p className="text-xl mb-8 text-indigo-100">
-            Join thousands of organizers who trust EventHub to bring their events to life
+            Join thousands of organizers who trust Karyakram to bring their
+            events to life
           </p>
           <Link
             to="/register"

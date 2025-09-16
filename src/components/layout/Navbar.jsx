@@ -37,38 +37,38 @@ const Navbar = () => {
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
             <Calendar className="h-8 w-8 text-indigo-600" />
-            <span className="text-xl font-bold text-gray-900">EventHub</span>
+            <span className="text-xl font-bold text-gray-900">Karyakram</span>
           </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            <Link 
-              to="/events" 
+            <Link
+              to="/events"
               className="text-gray-700 hover:text-indigo-600 transition-colors duration-200 font-medium"
             >
               Events
             </Link>
-            
+
             {isAuthenticated ? (
               <>
-                <Link 
-                  to="/dashboard" 
+                <Link
+                  to="/dashboard"
                   className="text-gray-700 hover:text-indigo-600 transition-colors duration-200 font-medium"
                 >
                   Dashboard
                 </Link>
-                
+
                 {isOrganizer && (
                   <>
-                    <Link 
-                      to="/create-event" 
+                    <Link
+                      to="/create-event"
                       className="flex items-center space-x-1 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors duration-200 font-medium"
                     >
                       <Plus className="h-4 w-4" />
                       <span>Create Event</span>
                     </Link>
-                    <Link 
-                      to="/analytics" 
+                    <Link
+                      to="/analytics"
                       className="text-gray-700 hover:text-indigo-600 transition-colors duration-200 font-medium"
                     >
                       Analytics
@@ -85,14 +85,14 @@ const Navbar = () => {
                     <Bell className="h-6 w-6" />
                     {unreadCount > 0 && (
                       <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                        {unreadCount > 9 ? '9+' : unreadCount}
+                        {unreadCount > 9 ? "9+" : unreadCount}
                       </span>
                     )}
                   </button>
-                  
+
                   {isNotificationsOpen && (
-                    <NotificationDropdown 
-                      onClose={() => setIsNotificationsOpen(false)} 
+                    <NotificationDropdown
+                      onClose={() => setIsNotificationsOpen(false)}
                     />
                   )}
                 </div>
@@ -105,9 +105,9 @@ const Navbar = () => {
                   >
                     <div className="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center">
                       {user?.avatar ? (
-                        <img 
-                          src={user.avatar} 
-                          alt="Profile" 
+                        <img
+                          src={user.avatar}
+                          alt="Profile"
                           className="w-8 h-8 rounded-full object-cover"
                         />
                       ) : (
@@ -159,14 +159,14 @@ const Navbar = () => {
               </>
             ) : (
               <div className="flex items-center space-x-4">
-                <Link 
-                  to="/login" 
+                <Link
+                  to="/login"
                   className="text-gray-700 hover:text-indigo-600 transition-colors duration-200 font-medium"
                 >
                   Sign In
                 </Link>
-                <Link 
-                  to="/register" 
+                <Link
+                  to="/register"
                   className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors duration-200 font-medium"
                 >
                   Sign Up
@@ -181,7 +181,11 @@ const Navbar = () => {
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="text-gray-700 hover:text-indigo-600 transition-colors duration-200"
             >
-              {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              {isMenuOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
             </button>
           </div>
         </div>
@@ -190,38 +194,44 @@ const Navbar = () => {
         {isMenuOpen && (
           <div className="md:hidden border-t border-gray-200 py-4">
             <div className="flex flex-col space-y-4">
-              <Link 
-                to="/events" 
+              <Link
+                to="/events"
                 className="text-gray-700 hover:text-indigo-600 transition-colors duration-200 font-medium"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Events
               </Link>
-              <Link to="/payment-history" className="text-gray-600 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium">
+              <Link
+                to="/payment-history"
+                className="text-gray-600 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium"
+              >
                 Payment History
               </Link>
-              
+
               {isAuthenticated ? (
                 <>
-                  <Link 
-                    to="/dashboard" 
+                  <Link
+                    to="/dashboard"
                     className="text-gray-700 hover:text-indigo-600 transition-colors duration-200 font-medium"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     Dashboard
                   </Link>
-                  <Link 
-                    to="/my-tickets" 
+                  <Link
+                    to="/my-tickets"
                     className="text-gray-700 hover:text-indigo-600 transition-colors duration-200 font-medium"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     My Tickets
                   </Link>
-                  <Link to="/payment-history" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                  <Link
+                    to="/payment-history"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
                     Payment History
                   </Link>
-                  <Link 
-                    to="/profile" 
+                  <Link
+                    to="/profile"
                     className="text-gray-700 hover:text-indigo-600 transition-colors duration-200 font-medium"
                     onClick={() => setIsMenuOpen(false)}
                   >
@@ -229,15 +239,15 @@ const Navbar = () => {
                   </Link>
                   {isOrganizer && (
                     <>
-                      <Link 
-                        to="/create-event" 
+                      <Link
+                        to="/create-event"
                         className="text-gray-700 hover:text-indigo-600 transition-colors duration-200 font-medium"
                         onClick={() => setIsMenuOpen(false)}
                       >
                         Create Event
                       </Link>
-                      <Link 
-                        to="/analytics" 
+                      <Link
+                        to="/analytics"
                         className="text-gray-700 hover:text-indigo-600 transition-colors duration-200 font-medium"
                         onClick={() => setIsMenuOpen(false)}
                       >
@@ -257,15 +267,15 @@ const Navbar = () => {
                 </>
               ) : (
                 <>
-                  <Link 
-                    to="/login" 
+                  <Link
+                    to="/login"
                     className="text-gray-700 hover:text-indigo-600 transition-colors duration-200 font-medium"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     Sign In
                   </Link>
-                  <Link 
-                    to="/register" 
+                  <Link
+                    to="/register"
                     className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors duration-200 font-medium text-center"
                     onClick={() => setIsMenuOpen(false)}
                   >
