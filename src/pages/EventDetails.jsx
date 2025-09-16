@@ -153,12 +153,14 @@ const EventDetails = () => {
   };
 
   const getAvailableTickets = (tierName) => {
-    // console.log(event, "event");
-    // console.log(tierName, "tierName");
     const tier = event.pricing.tiers.find((t) => t.name === tierName);
-    // console.log(tier, "tier");
-    // console.log(tier ? tier.quantity - tier.sold : 0);
-    return tier ? tier.quantity - tier.sold : 0;
+    if (!tier) return 0;
+    
+    // If sold property doesn't exist, assume 0 sold
+    const sold = tier.sold || 0;
+    const quantity = tier.quantity || 0;
+    
+    return Math.max(0, quantity - sold);
   };
 
   const getAverageRating = () => {
@@ -483,8 +485,8 @@ const EventDetails = () => {
                       >
                         {event.pricing.tiers.map((tier) => (
                           <option key={tier.name} value={tier.name}>
-                            {tier.name} - ${tier.price} (
-                            {getAvailableTickets(tier.name)} left)
+                            {tier.name} - ${tier.price} 
+                            ({getAvailableTickets(tier.name)} available)
                           </option>
                         ))}
                       </select>
@@ -507,11 +509,11 @@ const EventDetails = () => {
                               getAvailableTickets(selectedTicketType)
                             )
                           ),
-                        ].map((_, i) => (
+                        ].map((_, i) => i + 1 <= getAvailableTickets(selectedTicketType) ? (
                           <option key={i + 1} value={i + 1}>
                             {i + 1}
                           </option>
-                        ))}
+                        ) : null).filter(Boolean)}
                       </select>
                     </div>
 
@@ -534,16 +536,8 @@ const EventDetails = () => {
                       {getAvailableTickets(selectedTicketType) > 0 ? (
                         <button
                           onClick={() => {
-                            // console.log(
-                            //   selectedTicketType,
-                            //   "selectedtickettype"
-                            // );
-                            handleBookTicket1(
-                              event.pricing.tiers.find((t) => {
-                                // console.log(t.name === selectedTicketType);
-                                t.name === selectedTicketType;
-                              })
-                            );
+                            const selectedTier = event.pricing.tiers.find((t) => t.name === selectedTicketType);
+                            handleBookTicket1(selectedTier);
                           }}
                           className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors duration-200 flex items-center justify-center"
                         >

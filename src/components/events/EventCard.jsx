@@ -22,7 +22,9 @@ const EventCard = ({ event }) => {
   const getAvailableTickets = () => {
     if (!event.pricing?.tiers) return 0;
     return event.pricing.tiers.reduce((total, tier) => {
-      return total + (tier.quantity - tier.sold);
+      const sold = tier.sold || 0;
+      const quantity = tier.quantity || 0;
+      return total + Math.max(0, quantity - sold);
     }, 0);
   };
 
